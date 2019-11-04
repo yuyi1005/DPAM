@@ -8,16 +8,17 @@ According to Table 4 and Table 5, the accuracy should be about 90% on ModelNet40
 The paper can be found in: 
 http://openaccess.thecvf.com/content_ICCV_2019/html/Liu_Dynamic_Points_Agglomeration_for_Hierarchical_Point_Sets_Learning_ICCV_2019_paper.html
 
-##Setup
-###Preparation
+## Setup
+### Preparation
 Prepare binary file \*.bc for training (e.g. H:\ModelNet40\train and H:\ModelNet40\val).
 Or modify the dataset.py file to load your data.
 
-###Training
+### Training
 python train.py --data_dir=H:\ModelNet40
 
-##Performance
-###Classification on ModelNet40
+## Performance
+### Classification on ModelNet40
+
 |Model|Accuracy|
 |-|-|
 |DPAM+111 (Paper)|90.9%|
