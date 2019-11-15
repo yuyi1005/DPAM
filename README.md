@@ -24,4 +24,4 @@ python train.py --data_dir=H:\ModelNet40
 |DPAM+111 (Paper)|90.9%|
 |DPAM+841 (Paper)|91.9%|
 |DPAM(vanilla)+841 (Paper)|91.4%|
-|DPAM(vanilla)+111 (This implementation)|86.4%|
+|DPAM(vanilla)+111 (This implementation)|87.3%|
