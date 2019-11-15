@@ -151,22 +151,23 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, device, sav
 
 def parse_args():
     
-    parser = argparse.ArgumentParser(description="Arguments for training", 
+    parser = argparse.ArgumentParser(description='Arguments for training', 
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
-    parser.add_argument("--data_dir", type=str, default=R'H:\ModelNet40', help="Dataset directory")
-    parser.add_argument("--load_filename", type=str, default=None)
-    parser.add_argument("--save_filename", type=str, default='dpamnet1104.pt')
-    parser.add_argument("--rmap_filename", type=str, default=None, help="Remap file in loading checkpoint")
-    parser.add_argument("--batch_size", type=int, default=16)
-    parser.add_argument("--num_epochs", type=int, default=250)
-    parser.add_argument("--num_classes", type=int, default=40)
-    parser.add_argument("--point_num_max", type=int, default=1024)
+    parser.add_argument('--data_dir', type=str, default=R'H:\ModelNet40', help='Dataset directory')
+    parser.add_argument('--load_filename', type=str, default=None)
+    parser.add_argument('--save_filename', type=str, default='dpamnet1115.pt')
+    parser.add_argument('--rmap_filename', type=str, default=None, help='Remap file in loading checkpoint')
+    parser.add_argument('--batch_size', type=int, default=16)
+    parser.add_argument('--num_epochs', type=int, default=250)
+    parser.add_argument('--num_classes', type=int, default=40)
+    parser.add_argument('--point_num_max', type=int, default=1024)
 
     return parser.parse_args()
 
-if __name__=="__main__":
-    print('Pytorch version: ', torch.__version__)
+if __name__=='__main__':
+    print('Pytorch version:', torch.__version__)
+    print('GPU available:', torch.cuda.device_count())
     
     args = parse_args()
     
@@ -183,7 +184,7 @@ if __name__=="__main__":
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     # Create the model and send the model to GPU
     model = dpamnet.DpamNet(num_classes=num_classes)
-    model = nn.DataParallel(model, device_ids=[0, 1])
+    model = nn.DataParallel(model, device_ids=range(torch.cuda.device_count()))
     model = model.to(device)
     
     if load_filename is not None:
@@ -202,8 +203,8 @@ if __name__=="__main__":
         model.load_state_dict(model_dict)
     
     # Create training and validation datasets, as well as dataloaders
-    train_datasets = {x:dataset.BcDataset(os.path.join(data_dir, x), num_classes, point_num_max=point_num_max, use_transform=True) for x in ['train', 'val']}
-    train_dataloaders = {x:torch.utils.data.DataLoader(train_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True) for x in ['train', 'val']}
+    train_datasets = {x:dataset.BcDataset(os.path.join(data_dir, x), num_classes, point_num_max=point_num_max, use_transform=False) for x in ['train', 'val']}
+    train_dataloaders = {x:torch.utils.data.DataLoader(train_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True, drop_last=True) for x in ['train', 'val']}
     print('Num train/val:', len(train_datasets['train']), len(train_datasets['val']))
     
     # Criterion, optimizer, and schedulers

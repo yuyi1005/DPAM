@@ -16,8 +16,8 @@ class Dpam(nn.Module):
         
         self.layers = self.make_layer(planes_tab)
 
-        self.softmax1 = nn.Softmax(dim=3)
-        self.softmax2 = nn.Softmax(dim=2)
+        self.softmax1 = nn.Softmax(dim=2)
+        self.softmax2 = nn.Softmax(dim=3)
         self.eye = torch.eye(planes_tab[-1]).unsqueeze(0).unsqueeze(0)
         
         for m in self.modules():
